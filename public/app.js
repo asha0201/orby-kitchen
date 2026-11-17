@@ -209,7 +209,11 @@
     const gate = ob.status.complete ? '' : `<div class="notice">${ob.status.missing.length} onboarding item(s) open. <a href="#/profiles">Finish onboarding</a> to unlock the monthly plan.</div>`;
     const recent = notes.slice(0, 3);
     show(`
-      <h1>${esc(fmtDate(b.date))}</h1>
+      <section class="hero">
+        <p class="hero-kicker">Today</p>
+        <h1>${esc(fmtDate(b.date))}</h1>
+        <p class="hero-sub">${b.today.meals.filter((m) => m.recipe_id).length} of 4 meals planned · ${b.today.missing.length ? `${b.today.missing.length} item(s) to buy` : 'nothing to buy'}</p>
+      </section>
       ${gate}
       <section class="card">
         <div class="section-head"><h2>Today's menu</h2><a class="small-text" href="#/plan">Plan</a></div>
