@@ -254,6 +254,19 @@ function createRecipe(db, input) {
   return getRecipe(db, Number(info.lastInsertRowid));
 }
 
+// Adds the starter set, skipping any recipe whose name already exists.
+function addStarterRecipes(db) {
+  const { STARTER_RECIPES } = require('./starter-recipes');
+  const existing = new Set(db.prepare('SELECT LOWER(name) AS n FROM recipes').all().map((r) => r.n));
+  let added = 0;
+  for (const r of STARTER_RECIPES) {
+    if (existing.has(r.name.toLowerCase())) continue;
+    createRecipe(db, { ...r, ingredients_text: r.ingredients_text, steps_text: r.steps_text });
+    added++;
+  }
+  return added;
+}
+
 function updateRecipe(db, id, input) {
   const current = getRecipe(db, id);
   const v = cleanRecipe(input, { ...current, tags: current.tags });
@@ -805,7 +818,7 @@ function updateFeatureRequest(db, id, status) {
 module.exports = {
   SLOTS, HttpError, localParts, todayIn, addDays, monthDates, parseIngredientLine, parseIngredientLines, norm,
   getHousehold, people, getProfiles, getProfile, onboarding, saveAnswers, seedKnownFacts,
-  listRecipes, getRecipe, createRecipe, updateRecipe, deleteRecipe, addOutcome, cleanRecipe,
+  listRecipes, getRecipe, createRecipe, updateRecipe, deleteRecipe, addOutcome, cleanRecipe, addStarterRecipes,
   listMemories, createMemory, updateMemory, deleteMemory,
   generatePlan, getPlan, updatePlanEntry,
   listPantry, upsertPantry, updatePantry, deletePantry, importPantryText, cookProposal, cookConfirm, undoCook, listCookLogs,

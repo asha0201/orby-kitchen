@@ -317,8 +317,9 @@
     show(`
       <div class="row"><h1 class="grow">Recipes</h1><a class="btn primary" href="#/recipes/new">Add recipe</a></div>
       ${recipes.length ? '<input type="search" placeholder="Search recipes" data-input="filter-recipes" aria-label="Search recipes" class="mt-s">' : ''}
+      ${recipes.length ? '' : '<section class="card"><h2>Starter recipes</h2><p class="muted small-text">Nine simple recipes matching your tastes: South Indian breakfast and curries, aglio e olio, air-fryer chicken, and peanut chutney. Nutrition is left blank. Edit any of them freely.</p><button class="btn primary block" type="button" data-action="add-starter">Add starter recipes</button></section>'}
       <section class="card items" id="recipe-list">
-        ${recipes.length ? recipes.map(recipeRow).join('') : `<div class="empty">No recipes yet.<br><span class="small-text">Orby does not ship a recipe catalogue. Add the recipes your household cooks, and the monthly plan will use only those.</span></div>`}
+        ${recipes.length ? recipes.map(recipeRow).join('') : `<div class="empty">No recipes yet.<br><span class="small-text">Add your own, or start with the household's starter set below.</span></div>`}
       </section>`);
   }
 
@@ -800,6 +801,11 @@
     'gen-all': async (el) => { if (confirm('Replace the unlocked meals in this month?')) await generate(el.dataset.month, true); },
     'toggle-lock': async (el) => { await api('PATCH', `/api/plan/entries/${el.dataset.id}`, { locked: el.dataset.locked === 'true' }); route(); },
     repeat: async (el) => { await api('PATCH', `/api/plan/entries/${el.dataset.id}`, { recipe_id: Number(el.dataset.recipe) }); toast('Repeated yesterday’s meal.'); route(); },
+    'add-starter': async () => {
+      const r = await api('POST', '/api/recipes/starter', {});
+      toast(`Added ${r.added} starter recipe(s).`);
+      route();
+    },
     'recipe-archive': async (el) => { await api('PATCH', `/api/recipes/${el.dataset.id}`, { enabled: el.dataset.enabled === 'true' }); route(); },
     'recipe-delete': async (el) => {
       if (!confirm('Delete this recipe? Plan slots that use it will become empty. Cooking history keeps the name.')) return;
