@@ -240,7 +240,8 @@
     const byKey = new Map(plan.entries.map((e) => [`${e.date}|${e.slot}`, e]));
     const dates = [...new Set(plan.entries.map((e) => e.date))].sort();
     const open = plan.onboarding.missing.length;
-    const gate = plan.onboarding.complete ? '' : `<div class="notice">Plan generation is locked until onboarding is complete (${open} open). <a href="#/profiles">Finish onboarding</a></div>`;
+    const gate = plan.onboarding.complete ? '' : `<div class="notice">Plan generation is locked until onboarding is complete (${open} open). <a href="#/profiles">Finish onboarding</a></div>`
+      + (recipes.length ? '' : `<div class="notice">Your recipe library is empty, so there is nothing to plan with yet. <a href="#/recipes/new">Add your first recipe</a>.</div>`);
     const recipeOptions = (selectedId) => `<option value="">— none —</option>${recipes.map((r) =>
       `<option value="${r.id}"${r.id === selectedId ? ' selected' : ''}>${esc(r.name)}</option>`).join('')}`;
 
@@ -289,7 +290,8 @@
   async function generate(month, overwrite) {
     try {
       const r = await api('POST', '/api/plan/generate', { month, overwrite });
-      toast(`Filled ${r.filled} slot(s). ${r.empty} still empty.`);
+      if (r.filled === 0) toast('Nothing to fill yet. Add recipes first, then press Fill again.', { error: true });
+      else toast(`Filled ${r.filled} slot(s). ${r.empty} still empty.`);
       route();
     } catch (e) {
       if (e.status === 423) {
