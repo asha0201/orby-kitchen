@@ -138,6 +138,7 @@ function createApp({ db, config }) {
     res.json(d.listRecipes(db, { includeDisabled: req.query.all === '1' }));
   });
   app.post('/api/recipes', wrap((req, res) => res.status(201).json(d.createRecipe(db, body(req)))));
+  app.post('/api/recipes/starter', wrap((req, res) => res.status(201).json({ added: d.addStarterRecipes(db) })));
   app.get('/api/recipes/:id', wrap((req, res) => res.json(d.getRecipe(db, id(req)))));
   app.patch('/api/recipes/:id', wrap((req, res) => res.json(d.updateRecipe(db, id(req), body(req)))));
   app.delete('/api/recipes/:id', wrap((req, res) => { d.deleteRecipe(db, id(req)); res.json({ ok: true }); }));

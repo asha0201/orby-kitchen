@@ -362,3 +362,20 @@ describe('HTTP API', () => {
     assert.equal(locked.status, 429, 'correct PIN is refused while locked');
   });
 });
+
+describe('starter recipes', () => {
+  test('adds the starter set once and never duplicates', () => {
+    const db = freshDb();
+    const first = d.addStarterRecipes(db);
+    const second = d.addStarterRecipes(db);
+    assert.equal(first, require('../server/starter-recipes').STARTER_RECIPES.length);
+    assert.equal(second, 0);
+    assert.equal(d.listRecipes(db).length, first);
+  });
+  test('starter recipes have no seafood and no invented nutrition', () => {
+    for (const r of require('../server/starter-recipes').STARTER_RECIPES) {
+      assert.doesNotMatch(r.ingredients_text, /prawn|fish|crab|squid|mussel/i, r.name);
+      assert.equal(r.nutrition, undefined, r.name);
+    }
+  });
+});
