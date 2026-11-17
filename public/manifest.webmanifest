@@ -1,0 +1,12 @@
+{
+  "name": "Orby Kitchen",
+  "short_name": "Orby",
+  "description": "Household meal planning, pantry and shopping for two.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f7f4ee",
+  "theme_color": "#2f6f4f",
+  "icons": [
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}
