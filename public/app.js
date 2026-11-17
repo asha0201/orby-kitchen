@@ -317,7 +317,7 @@
     show(`
       <div class="row"><h1 class="grow">Recipes</h1><a class="btn primary" href="#/recipes/new">Add recipe</a></div>
       ${recipes.length ? '<input type="search" placeholder="Search recipes" data-input="filter-recipes" aria-label="Search recipes" class="mt-s">' : ''}
-      ${recipes.length ? '' : '<section class="card"><h2>Starter recipes</h2><p class="muted small-text">Nine simple recipes matching your tastes: South Indian breakfast and curries, aglio e olio, air-fryer chicken, and peanut chutney. Nutrition is left blank. Edit any of them freely.</p><button class="btn primary block" type="button" data-action="add-starter">Add starter recipes</button></section>'}
+      <section class="card"><h2>Starter recipes</h2><p class="muted small-text">Thirty recipes matching your tastes: South Indian breakfasts, curries and rice, aglio e olio, chicken, air-fryer dishes, peanut chutney and snacks. Nutrition is left blank. Pressing this adds only the ones you don't have yet; edit any of them freely.</p><button class="btn primary block" type="button" data-action="add-starter">Add starter recipes</button></section>
       <section class="card items" id="recipe-list">
         ${recipes.length ? recipes.map(recipeRow).join('') : `<div class="empty">No recipes yet.<br><span class="small-text">Add your own, or start with the household's starter set below.</span></div>`}
       </section>`);
